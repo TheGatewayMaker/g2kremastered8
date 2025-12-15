@@ -25,12 +25,19 @@ export default function Torrents() {
   useEffect(() => {
     // Update meta tags for SEO
     updateMetaTags({
-      title: "Torrent Resources - Gateway Links 2K25 | Torrent Sites",
+      title: "Torrent Sites & Resources - Gateway Links 2K25 | P2P Sharing Platforms",
       description:
-        "Access organized torrent resources and links for content sharing. Gateway Links 2K25 curates the best torrent platforms and torrent sites.",
+        "Access organized torrent resources and links for content sharing. Gateway Links 2K25 curates the best torrent platforms, torrent sites, and P2P sharing resources for downloading content.",
       url: "https://gatewaylinks2k25.com/torrents",
       keywords:
-        "torrent links, torrent sites, torrent resources, p2p sharing, torrent platforms, download torrents",
+        "torrent links, torrent sites, torrent resources, p2p sharing, torrent platforms, download torrents, best torrent sites, torrent downloads, p2p platforms, content sharing",
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Torrents Resources",
+        "description": "Curated collection of torrent sites and P2P sharing platforms",
+        "url": "https://gatewaylinks2k25.com/torrents"
+      }
     });
   }, []);
 
