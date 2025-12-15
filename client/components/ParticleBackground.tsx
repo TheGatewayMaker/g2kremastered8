@@ -168,26 +168,26 @@ export function ParticleBackground() {
         // Size based on depth with better scaling
         const size = star.baseSize * (star.z * 0.6 + 0.4);
 
-        // Draw outer glow (nebula effect)
-        ctx.fillStyle = `rgba(100, 150, 200, ${star.currentOpacity * 0.15})`;
+        // Draw outer glow (nebula effect) - reduced radius, increased brightness
+        ctx.fillStyle = `rgba(120, 170, 220, ${star.currentOpacity * 0.35})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, size * 2.5, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 1.8, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw middle glow
-        ctx.fillStyle = `rgba(130, 180, 240, ${star.currentOpacity * 0.25})`;
+        // Draw middle glow - increased brightness
+        ctx.fillStyle = `rgba(150, 200, 255, ${star.currentOpacity * 0.5})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, size * 1.6, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 1.2, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw core with bright color
-        ctx.fillStyle = `rgba(200, 230, 255, ${star.currentOpacity})`;
+        ctx.fillStyle = `rgba(220, 240, 255, ${star.currentOpacity * 1.1})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw bright center
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, star.currentOpacity * 0.6)})`;
+        // Draw bright center - increased brightness
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, star.currentOpacity * 0.85)})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, size * 0.5, 0, Math.PI * 2);
         ctx.fill();
