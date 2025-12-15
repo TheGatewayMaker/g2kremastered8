@@ -113,12 +113,20 @@ export default function Games() {
   useEffect(() => {
     // Update meta tags for SEO
     updateMetaTags({
-      title: "Free Games Download - Gateway Links 2K25 | Gaming Links",
+      title:
+        "Free Games & Gaming Resources - Gateway Links 2K25 | Download PC Games Online",
       description:
-        "Browse gaming links and resources for all types of games. Gateway Links 2K25 provides curated gaming platform and free game download site links.",
+        "Browse gaming links and resources for all types of games. Gateway Links 2K25 provides curated gaming platforms, free game downloads, PC games, browser games, game launchers, and gaming site links.",
       url: "https://gatewaylinks2k25.com/games",
       keywords:
-        "game links, gaming platforms, video games, game downloads, free games, PC games, game resources, gaming sites",
+        "game links, gaming platforms, video games, game downloads, free games, PC games, game resources, gaming sites, free game download, online games, browser games, game launchers, gaming resources",
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Gaming Resources",
+        "description": "Curated collection of gaming platforms and game download resources",
+        "url": "https://gatewaylinks2k25.com/games"
+      }
     });
   }, []);
 
