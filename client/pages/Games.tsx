@@ -108,7 +108,7 @@ const gamesCategories = [
 ];
 
 export default function Games() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     // Update meta tags for SEO
@@ -124,10 +124,7 @@ export default function Games() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+    const initialTheme = savedTheme || "dark";
     setTheme(initialTheme);
     document.documentElement.setAttribute("data-theme", initialTheme);
   }, []);
@@ -164,8 +161,8 @@ export default function Games() {
       {/* Main Content */}
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         {/* Page Header */}
-        <div className="mb-12 sm:mb-16">
-          <h1 className="heading-lg text-[hsl(var(--text-primary))] mb-3">
+        <div className="mb-12 sm:mb-16 animate-fade-in">
+          <h1 className="heading-lg text-[hsl(var(--text-primary))] mb-3 font-black">
             Gaming Resources
           </h1>
           <p className="text-base sm:text-lg text-[hsl(var(--text-secondary))]">
@@ -175,12 +172,16 @@ export default function Games() {
 
         {/* Categories */}
         <div className="space-y-8 sm:space-y-10">
-          {gamesCategories.map((category) => {
+          {gamesCategories.map((category, index) => {
             const IconComponent = category.icon;
             return (
               <section
                 key={category.title}
                 className="group rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))] p-6 sm:p-8 transition-all duration-300 hover:border-[hsl(var(--text-secondary))] hover:shadow-[0_4px_12px_var(--shadow-hover)]"
+                style={{
+                  animation: `slideInFade 0.6s ease-out ${index * 0.1}s forwards`,
+                  opacity: 0,
+                }}
               >
                 {/* Category Header */}
                 <div className="flex items-center gap-3 mb-2">
@@ -188,7 +189,7 @@ export default function Games() {
                     size={24}
                     className="text-[hsl(var(--text-secondary))] transition-colors duration-300 group-hover:text-[hsl(var(--text-primary))]"
                   />
-                  <h2 className="heading-md text-[hsl(var(--text-primary))]">
+                  <h2 className="heading-md text-[hsl(var(--text-primary))] font-black">
                     {category.title}
                   </h2>
                 </div>
