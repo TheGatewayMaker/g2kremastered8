@@ -3,26 +3,26 @@ import { useEffect, useRef, useState } from "react";
 interface Star {
   x: number;
   y: number;
-  y0: number; // Original Y position
   z: number;
   vz: number;
   baseOpacity: number;
   currentOpacity: number;
   vx: number;
   vy: number;
-  mass: number;
+  targetVx: number;
+  targetVy: number;
+  twinkleCycle: number;
+  baseSize: number;
 }
 
 export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const mouseRef = useRef({ x: 0, y: 0, vx: 0, vy: 0 });
-  const lastMouseRef = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number>();
   const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
-    // Check if desktop on mount
     const checkDesktop = () => {
       setIsDesktop(window.innerWidth >= 1024);
     };
@@ -41,7 +41,6 @@ export function ParticleBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Set canvas size
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -50,132 +49,147 @@ export function ParticleBackground() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Initialize stars - much more dense
+    // Initialize stars with better distribution
     const starCount = Math.max(
-      300,
+      150,
       Math.min(
-        800,
-        Math.floor((window.innerWidth * window.innerHeight) / 3000),
+        400,
+        Math.floor((window.innerWidth * window.innerHeight) / 5000),
       ),
     );
     starsRef.current = Array.from({ length: starCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      y0: Math.random() * canvas.height,
-      z: Math.random(),
-      vz: Math.random() * 0.008 + 0.003,
-      baseOpacity: Math.random() * 0.5 + 0.15,
-      currentOpacity: Math.random() * 0.5 + 0.15,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.2,
-      mass: Math.random() * 0.5 + 0.5,
+      z: Math.random() * 0.5 + 0.3,
+      vz: Math.random() * 0.0004 + 0.0001,
+      baseOpacity: Math.random() * 0.6 + 0.2,
+      currentOpacity: Math.random() * 0.6 + 0.2,
+      vx: 0,
+      vy: 0,
+      targetVx: 0,
+      targetVy: 0,
+      twinkleCycle: Math.random() * Math.PI * 2,
+      baseSize: Math.random() * 0.8 + 0.4,
     }));
 
-    // Mouse tracking with velocity
+    // Smooth mouse tracking
     const handleMouseMove = (e: MouseEvent) => {
       const newX = e.clientX;
       const newY = e.clientY;
 
-      mouseRef.current.vx = newX - mouseRef.current.x;
-      mouseRef.current.vy = newY - mouseRef.current.y;
+      mouseRef.current.vx = (newX - mouseRef.current.x) * 0.1;
+      mouseRef.current.vy = (newY - mouseRef.current.y) * 0.1;
       mouseRef.current.x = newX;
       mouseRef.current.y = newY;
-
-      lastMouseRef.current.x = newX;
-      lastMouseRef.current.y = newY;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Animation loop
+    let frameCount = 0;
+
     const animate = () => {
-      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const stars = starsRef.current;
       const mouseX = mouseRef.current.x;
       const mouseY = mouseRef.current.y;
-      const mouseVx = mouseRef.current.vx;
-      const mouseVy = mouseRef.current.vy;
-      const attractRadius = 300;
-      const repelRadius = 80;
+      const attractRadius = 250;
+      const repelRadius = 50;
+
+      frameCount++;
 
       stars.forEach((star) => {
-        // Calculate distance to mouse
+        // Smooth twinkling animation
+        star.twinkleCycle += 0.02;
+        const twinkle = Math.sin(star.twinkleCycle) * 0.3 + 0.7;
+
+        // Distance to mouse
         const dx = mouseX - star.x;
         const dy = mouseY - star.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distanceSq = dx * dx + dy * dy;
+        const distance = Math.sqrt(distanceSq);
 
-        // Intelligent cursor interaction
-        if (distance < attractRadius) {
-          // Attraction force at medium distance
+        // Smooth, physics-based cursor interaction
+        if (distance < attractRadius && distance > 1) {
+          const influence = Math.max(0, 1 - distance / attractRadius);
+          const easeInfluence = influence * influence; // Smooth easing
+
           if (distance > repelRadius) {
-            const influence = 1 - distance / attractRadius;
-            const force = influence * 0.15;
-
-            // Attract particles toward cursor movement direction
-            star.vx += (dx / distance) * force * 0.5;
-            star.vy += (dy / distance) * force * 0.5;
-
-            // Also push in direction of cursor movement
-            star.vx += mouseVx * 0.05;
-            star.vy += mouseVy * 0.05;
-
-            star.currentOpacity = star.baseOpacity + influence * 0.8;
+            // Attraction with smooth acceleration
+            const force = easeInfluence * 0.08;
+            star.targetVx = (dx / distance) * force * 2;
+            star.targetVy = (dy / distance) * force * 2;
+            star.currentOpacity =
+              star.baseOpacity + easeInfluence * 0.4 * twinkle;
           } else {
-            // Repulsion force when too close
-            const repelForce = (1 - distance / repelRadius) * 0.2;
-            star.vx -= (dx / distance) * repelForce;
-            star.vy -= (dy / distance) * repelForce;
+            // Repulsion when too close
+            const repelForce = (1 - distance / repelRadius) * 0.15;
+            star.targetVx = -(dx / distance) * repelForce;
+            star.targetVy = -(dy / distance) * repelForce;
             star.currentOpacity = star.baseOpacity + 0.5;
           }
         } else {
-          star.currentOpacity = star.baseOpacity;
+          // Gradual return to idle state
+          star.targetVx *= 0.95;
+          star.targetVy *= 0.95;
+          star.currentOpacity = star.baseOpacity * twinkle;
         }
 
-        // Apply damping
-        star.vx *= 0.92;
-        star.vy *= 0.92;
+        // Smooth velocity interpolation
+        star.vx += (star.targetVx - star.vx) * 0.08;
+        star.vy += (star.targetVy - star.vy) * 0.08;
 
-        // Gentle gravity back to original Y
-        const yDiff = star.y0 - star.y;
-        star.vy += yDiff * 0.002;
+        // Apply strong damping for smooth motion
+        star.vx *= 0.94;
+        star.vy *= 0.94;
 
         // Update position
         star.x += star.vx;
         star.y += star.vy;
 
-        // Depth effect
+        // Depth cycling
         star.z += star.vz;
         if (star.z > 1) {
-          star.z = 0;
+          star.z = Math.random() * 0.2;
           star.x = Math.random() * canvas.width;
           star.y = Math.random() * canvas.height;
-          star.y0 = star.y;
           star.vx = 0;
           star.vy = 0;
-          star.baseOpacity = Math.random() * 0.5 + 0.15;
+          star.baseOpacity = Math.random() * 0.6 + 0.2;
+          star.baseSize = Math.random() * 0.8 + 0.4;
         }
 
         // Wrap around edges
-        if (star.x < -20) star.x = canvas.width + 20;
-        if (star.x > canvas.width + 20) star.x = -20;
-        if (star.y < -20) star.y = canvas.height + 20;
-        if (star.y > canvas.height + 20) star.y = -20;
+        if (star.x < -50) star.x = canvas.width + 50;
+        if (star.x > canvas.width + 50) star.x = -50;
+        if (star.y < -50) star.y = canvas.height + 50;
+        if (star.y > canvas.height + 50) star.y = -50;
 
-        // Calculate size based on depth
-        const size = star.z * 1.8;
+        // Size based on depth with better scaling
+        const size = star.baseSize * (star.z * 0.6 + 0.4);
 
-        // Draw star with subtle glow
-        ctx.fillStyle = `rgba(150, 200, 255, ${star.currentOpacity * 0.4})`;
+        // Draw outer glow (nebula effect)
+        ctx.fillStyle = `rgba(100, 150, 200, ${star.currentOpacity * 0.15})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, Math.max(0.5, size * 1.3), 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 2.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw core
+        // Draw middle glow
+        ctx.fillStyle = `rgba(130, 180, 240, ${star.currentOpacity * 0.25})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, size * 1.6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw core with bright color
         ctx.fillStyle = `rgba(200, 230, 255, ${star.currentOpacity})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, Math.max(0.2, size), 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw bright center
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, star.currentOpacity * 0.6)})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, size * 0.5, 0, Math.PI * 2);
         ctx.fill();
       });
 
