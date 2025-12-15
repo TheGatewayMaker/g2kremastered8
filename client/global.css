@@ -127,6 +127,60 @@
     .heading-md {
       @apply heading-display text-3xl sm:text-4xl lg:text-5xl;
     }
+
+    /* Animation classes */
+    .animate-slide-in-fade {
+      animation: slideInFade 0.6s ease-out forwards;
+    }
+
+    .animate-slide-in-fade-delay-100 {
+      animation: slideInFade 0.6s ease-out 0.1s forwards;
+      opacity: 0;
+    }
+
+    .animate-slide-in-fade-delay-200 {
+      animation: slideInFade 0.6s ease-out 0.2s forwards;
+      opacity: 0;
+    }
+
+    .animate-slide-in-fade-delay-300 {
+      animation: slideInFade 0.6s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+
+    .animate-slide-in-fade-delay-400 {
+      animation: slideInFade 0.6s ease-out 0.4s forwards;
+      opacity: 0;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .animate-fade-in-delay-100 {
+      animation: fadeIn 0.8s ease-out 0.1s forwards;
+      opacity: 0;
+    }
+  }
+
+  @keyframes slideInFade {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
