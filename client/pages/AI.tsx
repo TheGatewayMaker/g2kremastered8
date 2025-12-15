@@ -71,12 +71,19 @@ export default function AI() {
     // Update meta tags for SEO
     updateMetaTags({
       title:
-        "AI Tools & Resources - Gateway Links 2K25 | Artificial Intelligence",
+        "Best AI Tools & Resources - Gateway Links 2K25 | Free Artificial Intelligence Platforms",
       description:
-        "Discover curated AI tools, machine learning resources, and intelligent applications. Gateway Links 2K25 provides the best collection of AI platforms for chatbots, image generation, and coding assistance.",
+        "Discover curated AI tools, machine learning resources, and intelligent applications. Gateway Links 2K25 provides the best collection of AI platforms for chatbots, AI image generation, coding assistance, and more.",
       url: "https://gatewaylinks2k25.com/ai",
       keywords:
-        "AI tools, artificial intelligence, machine learning, AI resources, AI platforms, chatbots, image generation AI, coding AI",
+        "AI tools, artificial intelligence, machine learning, AI resources, AI platforms, chatbots, image generation AI, coding AI, AI software, free AI tools, generative AI, AI resources, intelligence platforms, machine learning tools",
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "AI Tools & Resources",
+        "description": "Curated collection of artificial intelligence tools and platforms",
+        "url": "https://gatewaylinks2k25.com/ai"
+      }
     });
   }, []);
 
