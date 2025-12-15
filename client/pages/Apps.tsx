@@ -29,12 +29,19 @@ export default function Apps() {
     // Update meta tags for SEO
     updateMetaTags({
       title:
-        "Apps & Software Download - Gateway Links 2K25 | Free Applications",
+        "Free Software & Apps Download - Gateway Links 2K25 | Applications & Tools",
       description:
-        "Download essential applications and software tools. Gateway Links 2K25 provides curated links to productivity apps, development software, and utility tools.",
+        "Download free applications, software tools, and productivity apps. Gateway Links 2K25 provides curated links to development software, utilities, and essential tools for Windows, Mac, and Linux.",
       url: "https://gatewaylinks2k25.com/apps",
       keywords:
-        "app downloads, software downloads, free applications, productivity apps, development software, utility tools, apps & softwares",
+        "app downloads, software downloads, free applications, free software, productivity apps, development software, utility tools, apps & softwares, free tools, application links, software links",
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Apps & Software",
+        "description": "Free applications and software tools directory",
+        "url": "https://gatewaylinks2k25.com/apps"
+      }
     });
   }, []);
 
