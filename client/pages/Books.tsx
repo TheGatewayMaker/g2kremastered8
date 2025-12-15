@@ -85,12 +85,19 @@ export default function Books() {
     // Update meta tags for SEO
     updateMetaTags({
       title:
-        "Books & Novels Download - Gateway Links 2K25 | Free Reading Resources",
+        "Free Books & Novels Online - Gateway Links 2K25 | E-Books, Audiobooks & Manga",
       description:
-        "Access a vast collection of e-books, novels, manga, and audiobooks. Gateway Links 2K25 provides curated links to digital reading resources and book download sites.",
+        "Access a vast collection of free books, e-books, novels, manga, and audiobooks. Gateway Links 2K25 provides curated links to digital reading resources, book download sites, and literature platforms.",
       url: "https://gatewaylinks2k25.com/books",
       keywords:
-        "e-books, novels, digital books, manga, audiobooks, reading resources, book downloads, literature links",
+        "free books, e-books, novels, digital books, manga, audiobooks, reading resources, book downloads, literature links, free books online, ebook download, novel reading, free manga, free audiobooks",
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Books & Novels",
+        "description": "Free books, e-books, novels, manga, and audiobooks directory",
+        "url": "https://gatewaylinks2k25.com/books"
+      }
     });
   }, []);
 
