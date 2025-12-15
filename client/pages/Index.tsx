@@ -157,14 +157,27 @@ export default function Index() {
         {/* Categories Grid */}
         <section className="mb-16" aria-label="Gateway Links Categories">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <article
                 key={category.name}
-                className={`group relative rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))] p-6 sm:p-7 lg:p-8 transition-all duration-300 ${
+                className={`group relative rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))] p-6 sm:p-7 lg:p-8 transition-all duration-300 animate-slide-in-fade ${
+                  index === 0
+                    ? "animation-delay-0"
+                    : index === 1
+                      ? "animation-delay-100"
+                      : index === 2
+                        ? "animation-delay-200"
+                        : "animation-delay-300"
+                } ${
                   category.disabled
                     ? "cursor-not-allowed opacity-50"
                     : "hover:border-[hsl(var(--text-secondary))] hover:shadow-[0_4px_12px_var(--shadow-hover)]"
                 }`}
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                  opacity: 0,
+                  animation: `slideInFade 0.6s ease-out ${index * 0.1}s forwards`,
+                }}
               >
                 <Link
                   to={category.path}
