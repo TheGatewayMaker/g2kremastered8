@@ -65,26 +65,40 @@ const categories = [
 ];
 
 export default function Index() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     // Update meta tags for SEO
     updateMetaTags({
-      title: "Gateway Links 2K25 - g2k Ultimate Link Directory",
+      title:
+        "Gateway Links 2K25 | Free Movies, Streaming, Apps & Books Online | G2K",
       description:
-        "Gateway Links 2K25 - Your ultimate gateway to discover streaming platforms, applications, books, AI tools, games, torrents, and more. All curated links in one place.",
+        "Gateway Links 2K25 (G2K) - Your ultimate gateway to discover free movies websites, streaming platforms, free books, AI tools, games, apps & torrents. Watch free movies online & access curated links in one place.",
       url: "https://gatewaylinks2k25.com/",
       keywords:
-        "g2k, gateway links, gateway links 2k25, link aggregator, streaming, apps, books, AI tools, games, torrents",
+        "g2k, g2k site, gateway links, gateway links 2k25, gateway 2k25, free movies websites, watch free movies, free movies online, free books, streaming platforms, apps, AI tools, games, torrents, link aggregator, movie links, book resources",
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Gateway Links 2K25",
+        alternateName: ["G2K", "Gateway Links", "Gateway 2K25"],
+        description:
+          "Your ultimate gateway to discover streaming platforms, applications, books, AI tools, games, torrents, and more",
+        url: "https://gatewaylinks2k25.com",
+        sameAs: ["https://www.g2k.co", "https://www.g2kgames.net"],
+        mainEntity: {
+          "@type": "LocalBusiness",
+          name: "Gateway Links 2K25",
+          description:
+            "Link aggregator directory for streaming, apps, books, AI tools, games, and torrents",
+        },
+      },
     });
   }, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+    const initialTheme = savedTheme || "dark";
     setTheme(initialTheme);
     document.documentElement.setAttribute("data-theme", initialTheme);
   }, []);
@@ -139,17 +153,17 @@ export default function Index() {
       {/* Main Content */}
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         {/* Hero Section */}
-        <section className="mb-16 sm:mb-20 lg:mb-24 relative">
+        <section className="mb-16 sm:mb-20 lg:mb-24 relative animate-fade-in">
           <div className="space-y-6 sm:space-y-8">
             <div className="space-y-2">
-              <h1 className="heading-xl text-[hsl(var(--text-primary))] leading-tight">
+              <h1 className="heading-xl text-[hsl(var(--text-primary))] leading-tight font-black">
                 Gateway Links
               </h1>
-              <h2 className="heading-lg text-[hsl(var(--text-primary))] leading-tight opacity-80">
+              <h2 className="heading-lg text-[hsl(var(--text-primary))] leading-tight opacity-80 font-black">
                 2K25
               </h2>
             </div>
-            <p className="text-base sm:text-lg text-[hsl(var(--text-secondary))] max-w-2xl leading-relaxed">
+            <p className="text-base sm:text-lg text-[hsl(var(--text-secondary))] max-w-2xl leading-relaxed animate-fade-in-delay-100">
               Your gateway to an extensive collection of streaming platforms,
               applications, books, AI tools, games, and more. Discover
               everything in one place with a clean, modern interface.
@@ -160,14 +174,27 @@ export default function Index() {
         {/* Categories Grid */}
         <section className="mb-16" aria-label="Gateway Links Categories">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <article
                 key={category.name}
-                className={`group relative rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))] p-6 sm:p-7 lg:p-8 transition-all duration-300 ${
+                className={`group relative rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--bg-card))] p-6 sm:p-7 lg:p-8 transition-all duration-300 animate-slide-in-fade ${
+                  index === 0
+                    ? "animation-delay-0"
+                    : index === 1
+                      ? "animation-delay-100"
+                      : index === 2
+                        ? "animation-delay-200"
+                        : "animation-delay-300"
+                } ${
                   category.disabled
                     ? "cursor-not-allowed opacity-50"
                     : "hover:border-[hsl(var(--text-secondary))] hover:shadow-[0_4px_12px_var(--shadow-hover)]"
                 }`}
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                  opacity: 0,
+                  animation: `slideInFade 0.6s ease-out ${index * 0.1}s forwards`,
+                }}
               >
                 <Link
                   to={category.path}
@@ -177,7 +204,7 @@ export default function Index() {
                   {/* Content */}
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
-                      <h3 className="text-lg sm:text-xl font-bold text-[hsl(var(--text-primary))] leading-snug transition-colors duration-300">
+                      <h3 className="text-lg sm:text-xl font-black text-[hsl(var(--text-primary))] leading-snug transition-colors duration-300">
                         {category.name}
                       </h3>
                       {!category.disabled && (

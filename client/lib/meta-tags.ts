@@ -4,9 +4,50 @@ interface MetaTagConfig {
   url: string;
   keywords?: string;
   ogImage?: string;
+  schema?: Record<string, unknown>;
 }
 
 export function updateMetaTags(config: MetaTagConfig) {
+  // Set viewport if not present
+  let viewport = document.querySelector('meta[name="viewport"]');
+  if (!viewport) {
+    viewport = document.createElement("meta");
+    viewport.setAttribute("name", "viewport");
+    viewport.setAttribute(
+      "content",
+      "width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover",
+    );
+    document.head.appendChild(viewport);
+  }
+
+  // Set robots meta tag
+  let robots = document.querySelector('meta[name="robots"]');
+  if (!robots) {
+    robots = document.createElement("meta");
+    robots.setAttribute("name", "robots");
+    robots.setAttribute(
+      "content",
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+    );
+    document.head.appendChild(robots);
+  }
+
+  // Set charset if not present
+  let charset = document.querySelector("meta[charset]");
+  if (!charset) {
+    charset = document.createElement("meta");
+    charset.setAttribute("charset", "utf-8");
+    document.head.insertBefore(charset, document.head.firstChild);
+  }
+
+  // Add language meta tag
+  let lang = document.querySelector('meta[http-equiv="content-language"]');
+  if (!lang) {
+    lang = document.createElement("meta");
+    lang.setAttribute("http-equiv", "content-language");
+    lang.setAttribute("content", "en-us");
+    document.head.appendChild(lang);
+  }
   // Update title
   document.title = config.title;
 
@@ -92,6 +133,44 @@ export function updateMetaTags(config: MetaTagConfig) {
     document.head.appendChild(twitterDescription);
   }
   twitterDescription.setAttribute("content", config.description);
+
+  // Add or update JSON-LD schema markup
+  if (config.schema) {
+    let schema = document.querySelector('script[type="application/ld+json"]');
+    if (!schema) {
+      schema = document.createElement("script");
+      schema.setAttribute("type", "application/ld+json");
+      document.head.appendChild(schema);
+    }
+    schema.textContent = JSON.stringify(config.schema);
+  }
+
+  // Add Open Graph image type
+  let ogType = document.querySelector('meta[property="og:type"]');
+  if (!ogType) {
+    ogType = document.createElement("meta");
+    ogType.setAttribute("property", "og:type");
+    document.head.appendChild(ogType);
+  }
+  ogType.setAttribute("content", "website");
+
+  // Add site name
+  let ogSiteName = document.querySelector('meta[property="og:site_name"]');
+  if (!ogSiteName) {
+    ogSiteName = document.createElement("meta");
+    ogSiteName.setAttribute("property", "og:site_name");
+    document.head.appendChild(ogSiteName);
+  }
+  ogSiteName.setAttribute("content", "Gateway Links 2K25");
+
+  // Add locale
+  let ogLocale = document.querySelector('meta[property="og:locale"]');
+  if (!ogLocale) {
+    ogLocale = document.createElement("meta");
+    ogLocale.setAttribute("property", "og:locale");
+    document.head.appendChild(ogLocale);
+  }
+  ogLocale.setAttribute("content", "en_US");
 }
 
 export function resetMetaTags() {
