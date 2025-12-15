@@ -137,7 +137,7 @@ const streamingCategories = [
 ];
 
 export default function Streaming() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     // Update meta tags for SEO
@@ -154,10 +154,7 @@ export default function Streaming() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+    const initialTheme = savedTheme || "dark";
     setTheme(initialTheme);
     document.documentElement.setAttribute("data-theme", initialTheme);
   }, []);
