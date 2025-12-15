@@ -143,12 +143,24 @@ export default function Streaming() {
     // Update meta tags for SEO
     updateMetaTags({
       title:
-        "Streaming Resources - Gateway Links 2K25 | Free Movies & TV Shows",
+        "Free Movies Online & Streaming Websites - Gateway Links 2K25 | Watch Movies Free",
       description:
-        "Discover curated streaming platforms and download sites for movies, TV shows, and online content. Gateway Links 2K25 provides the ultimate collection of streaming resources.",
+        "Discover free movies websites and curated streaming platforms for movies, TV shows, and online content. Watch free movies online with Gateway Links 2K25 - your ultimate collection of 45+ streaming resources and cinema platforms.",
       url: "https://gatewaylinks2k25.com/streaming",
       keywords:
-        "streaming sites, movie streaming, TV shows, free movies, watch online, streaming links, cinema streaming",
+        "free movies websites, watch free movies, free movies online, streaming sites, movie streaming, TV shows free, watch online, streaming links, cinema streaming, free streaming, movie links, online cinema, free movies sites, free films",
+      schema: {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Streaming Resources",
+        "description": "Curated collection of streaming platforms and download sites for movies and TV shows",
+        "url": "https://gatewaylinks2k25.com/streaming",
+        "mainEntity": {
+          "@type": "Thing",
+          "name": "Streaming Platforms",
+          "description": "45+ curated streaming sites for movies and TV shows"
+        }
+      }
     });
   }, []);
 
