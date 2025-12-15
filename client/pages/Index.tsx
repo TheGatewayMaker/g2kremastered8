@@ -70,7 +70,8 @@ export default function Index() {
   useEffect(() => {
     // Update meta tags for SEO
     updateMetaTags({
-      title: "Gateway Links 2K25 | Free Movies, Streaming, Apps & Books Online | G2K",
+      title:
+        "Gateway Links 2K25 | Free Movies, Streaming, Apps & Books Online | G2K",
       description:
         "Gateway Links 2K25 (G2K) - Your ultimate gateway to discover free movies websites, streaming platforms, free books, AI tools, games, apps & torrents. Watch free movies online & access curated links in one place.",
       url: "https://gatewaylinks2k25.com/",
@@ -79,19 +80,18 @@ export default function Index() {
       schema: {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "Gateway Links 2K25",
-        "alternateName": ["G2K", "Gateway Links", "Gateway 2K25"],
-        "description": "Your ultimate gateway to discover streaming platforms, applications, books, AI tools, games, torrents, and more",
-        "url": "https://gatewaylinks2k25.com",
-        "sameAs": [
-          "https://www.g2k.co",
-          "https://www.g2kgames.net"
-        ],
-        "mainEntity": {
+        name: "Gateway Links 2K25",
+        alternateName: ["G2K", "Gateway Links", "Gateway 2K25"],
+        description:
+          "Your ultimate gateway to discover streaming platforms, applications, books, AI tools, games, torrents, and more",
+        url: "https://gatewaylinks2k25.com",
+        sameAs: ["https://www.g2k.co", "https://www.g2kgames.net"],
+        mainEntity: {
           "@type": "LocalBusiness",
-          "name": "Gateway Links 2K25",
-          "description": "Link aggregator directory for streaming, apps, books, AI tools, games, and torrents"
-        }
+          name: "Gateway Links 2K25",
+          description:
+            "Link aggregator directory for streaming, apps, books, AI tools, games, and torrents",
+        },
       },
     });
   }, []);

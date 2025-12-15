@@ -94,10 +94,11 @@ export default function Books() {
       schema: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Books & Novels",
-        "description": "Free books, e-books, novels, manga, and audiobooks directory",
-        "url": "https://gatewaylinks2k25.com/books"
-      }
+        name: "Books & Novels",
+        description:
+          "Free books, e-books, novels, manga, and audiobooks directory",
+        url: "https://gatewaylinks2k25.com/books",
+      },
     });
   }, []);
 

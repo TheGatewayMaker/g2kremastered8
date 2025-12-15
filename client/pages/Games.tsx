@@ -123,10 +123,11 @@ export default function Games() {
       schema: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Gaming Resources",
-        "description": "Curated collection of gaming platforms and game download resources",
-        "url": "https://gatewaylinks2k25.com/games"
-      }
+        name: "Gaming Resources",
+        description:
+          "Curated collection of gaming platforms and game download resources",
+        url: "https://gatewaylinks2k25.com/games",
+      },
     });
   }, []);
 

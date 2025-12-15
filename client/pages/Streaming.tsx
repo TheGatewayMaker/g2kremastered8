@@ -152,15 +152,16 @@ export default function Streaming() {
       schema: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Streaming Resources",
-        "description": "Curated collection of streaming platforms and download sites for movies and TV shows",
-        "url": "https://gatewaylinks2k25.com/streaming",
-        "mainEntity": {
+        name: "Streaming Resources",
+        description:
+          "Curated collection of streaming platforms and download sites for movies and TV shows",
+        url: "https://gatewaylinks2k25.com/streaming",
+        mainEntity: {
           "@type": "Thing",
-          "name": "Streaming Platforms",
-          "description": "45+ curated streaming sites for movies and TV shows"
-        }
-      }
+          name: "Streaming Platforms",
+          description: "45+ curated streaming sites for movies and TV shows",
+        },
+      },
     });
   }, []);
 

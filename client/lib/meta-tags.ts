@@ -13,7 +13,10 @@ export function updateMetaTags(config: MetaTagConfig) {
   if (!viewport) {
     viewport = document.createElement("meta");
     viewport.setAttribute("name", "viewport");
-    viewport.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover");
+    viewport.setAttribute(
+      "content",
+      "width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover",
+    );
     document.head.appendChild(viewport);
   }
 
@@ -22,12 +25,15 @@ export function updateMetaTags(config: MetaTagConfig) {
   if (!robots) {
     robots = document.createElement("meta");
     robots.setAttribute("name", "robots");
-    robots.setAttribute("content", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
+    robots.setAttribute(
+      "content",
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+    );
     document.head.appendChild(robots);
   }
 
   // Set charset if not present
-  let charset = document.querySelector('meta[charset]');
+  let charset = document.querySelector("meta[charset]");
   if (!charset) {
     charset = document.createElement("meta");
     charset.setAttribute("charset", "utf-8");

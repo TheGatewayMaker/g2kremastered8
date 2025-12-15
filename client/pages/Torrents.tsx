@@ -25,7 +25,8 @@ export default function Torrents() {
   useEffect(() => {
     // Update meta tags for SEO
     updateMetaTags({
-      title: "Torrent Sites & Resources - Gateway Links 2K25 | P2P Sharing Platforms",
+      title:
+        "Torrent Sites & Resources - Gateway Links 2K25 | P2P Sharing Platforms",
       description:
         "Access organized torrent resources and links for content sharing. Gateway Links 2K25 curates the best torrent platforms, torrent sites, and P2P sharing resources for downloading content.",
       url: "https://gatewaylinks2k25.com/torrents",
@@ -34,10 +35,11 @@ export default function Torrents() {
       schema: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Torrents Resources",
-        "description": "Curated collection of torrent sites and P2P sharing platforms",
-        "url": "https://gatewaylinks2k25.com/torrents"
-      }
+        name: "Torrents Resources",
+        description:
+          "Curated collection of torrent sites and P2P sharing platforms",
+        url: "https://gatewaylinks2k25.com/torrents",
+      },
     });
   }, []);
 

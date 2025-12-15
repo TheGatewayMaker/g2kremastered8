@@ -80,10 +80,11 @@ export default function AI() {
       schema: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "AI Tools & Resources",
-        "description": "Curated collection of artificial intelligence tools and platforms",
-        "url": "https://gatewaylinks2k25.com/ai"
-      }
+        name: "AI Tools & Resources",
+        description:
+          "Curated collection of artificial intelligence tools and platforms",
+        url: "https://gatewaylinks2k25.com/ai",
+      },
     });
   }, []);
 

@@ -38,10 +38,10 @@ export default function Apps() {
       schema: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Apps & Software",
-        "description": "Free applications and software tools directory",
-        "url": "https://gatewaylinks2k25.com/apps"
-      }
+        name: "Apps & Software",
+        description: "Free applications and software tools directory",
+        url: "https://gatewaylinks2k25.com/apps",
+      },
     });
   }, []);
 
