@@ -4,9 +4,44 @@ interface MetaTagConfig {
   url: string;
   keywords?: string;
   ogImage?: string;
+  schema?: Record<string, unknown>;
 }
 
 export function updateMetaTags(config: MetaTagConfig) {
+  // Set viewport if not present
+  let viewport = document.querySelector('meta[name="viewport"]');
+  if (!viewport) {
+    viewport = document.createElement("meta");
+    viewport.setAttribute("name", "viewport");
+    viewport.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover");
+    document.head.appendChild(viewport);
+  }
+
+  // Set robots meta tag
+  let robots = document.querySelector('meta[name="robots"]');
+  if (!robots) {
+    robots = document.createElement("meta");
+    robots.setAttribute("name", "robots");
+    robots.setAttribute("content", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
+    document.head.appendChild(robots);
+  }
+
+  // Set charset if not present
+  let charset = document.querySelector('meta[charset]');
+  if (!charset) {
+    charset = document.createElement("meta");
+    charset.setAttribute("charset", "utf-8");
+    document.head.insertBefore(charset, document.head.firstChild);
+  }
+
+  // Add language meta tag
+  let lang = document.querySelector('meta[http-equiv="content-language"]');
+  if (!lang) {
+    lang = document.createElement("meta");
+    lang.setAttribute("http-equiv", "content-language");
+    lang.setAttribute("content", "en-us");
+    document.head.appendChild(lang);
+  }
   // Update title
   document.title = config.title;
 
