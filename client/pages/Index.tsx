@@ -187,7 +187,7 @@ export default function Index() {
                   {/* Content */}
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
-                      <h3 className="text-lg sm:text-xl font-bold text-[hsl(var(--text-primary))] leading-snug transition-colors duration-300">
+                      <h3 className="text-lg sm:text-xl font-black text-[hsl(var(--text-primary))] leading-snug transition-colors duration-300">
                         {category.name}
                       </h3>
                       {!category.disabled && (
