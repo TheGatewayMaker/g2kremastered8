@@ -136,17 +136,17 @@ export default function Index() {
       {/* Main Content */}
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         {/* Hero Section */}
-        <section className="mb-16 sm:mb-20 lg:mb-24 relative">
+        <section className="mb-16 sm:mb-20 lg:mb-24 relative animate-fade-in">
           <div className="space-y-6 sm:space-y-8">
             <div className="space-y-2">
-              <h1 className="heading-xl text-[hsl(var(--text-primary))] leading-tight">
+              <h1 className="heading-xl text-[hsl(var(--text-primary))] leading-tight font-black">
                 Gateway Links
               </h1>
-              <h2 className="heading-lg text-[hsl(var(--text-primary))] leading-tight opacity-80">
+              <h2 className="heading-lg text-[hsl(var(--text-primary))] leading-tight opacity-80 font-black">
                 2K25
               </h2>
             </div>
-            <p className="text-base sm:text-lg text-[hsl(var(--text-secondary))] max-w-2xl leading-relaxed">
+            <p className="text-base sm:text-lg text-[hsl(var(--text-secondary))] max-w-2xl leading-relaxed animate-fade-in-delay-100">
               Your gateway to an extensive collection of streaming platforms,
               applications, books, AI tools, games, and more. Discover
               everything in one place with a clean, modern interface.
