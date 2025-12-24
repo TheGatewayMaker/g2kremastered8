@@ -106,7 +106,7 @@ export function ParticleBackground() {
       mouseRef.current.y = newY;
     };
 
-    // Handle click burst effect with realistic physics
+    // Handle click burst effect with realistic space physics
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       // Only trigger burst on non-clickable areas (not buttons, links, inputs, etc.)
@@ -118,7 +118,7 @@ export function ParticleBackground() {
         const clickX = e.clientX;
         const clickY = e.clientY;
         const burstRadius = 280; // Larger burst radius for dramatic effect
-        const peakForce = 1.8; // Much stronger force
+        const peakForce = 1.8; // Peak impulse strength
 
         burstRef.current.x = clickX;
         burstRef.current.y = clickY;
@@ -131,20 +131,20 @@ export function ParticleBackground() {
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < burstRadius && distance > 2) {
-            // Inverse square law physics - closer stars get more force
+            // Inverse square law physics - closer stars get exponentially more force
             const influence = Math.max(0, 1 - distance / burstRadius);
-            const easeInfluence = influence * influence; // Quadratic easing
+            const easeInfluence = influence * influence; // Quadratic easing for realistic force falloff
 
-            // Calculate burst direction (radially outward from click)
+            // Calculate burst direction (radially outward from click point)
             const angle = Math.atan2(dy, dx);
             const burstSpeed = easeInfluence * peakForce;
 
-            // Apply strong initial velocity
-            star.burstVx = Math.cos(angle) * burstSpeed * 4.5;
-            star.burstVy = Math.sin(angle) * burstSpeed * 4.5;
+            // Apply strong initial velocity impulse
+            star.burstVx = Math.cos(angle) * burstSpeed * 5.2;
+            star.burstVy = Math.sin(angle) * burstSpeed * 5.2;
 
-            // Set burst immunity duration (frames immune to attraction)
-            star.burstImmunity = 60; // 1 second at 60fps before re-attraction
+            // Long duration burst - stars coast for 4+ seconds naturally
+            star.burstImmunity = 300; // 5 seconds at 60fps for natural coasting
             star.burstIntensity = easeInfluence;
 
             // Reset target velocity to prevent interference
@@ -156,7 +156,7 @@ export function ParticleBackground() {
         // Reset burst state after animation completes
         setTimeout(() => {
           burstRef.current.active = false;
-        }, 1000);
+        }, 5000);
       }
     };
 
