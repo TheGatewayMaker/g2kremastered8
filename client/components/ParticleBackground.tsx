@@ -106,7 +106,7 @@ export function ParticleBackground() {
       mouseRef.current.y = newY;
     };
 
-    // Handle click burst effect
+    // Handle click burst effect with realistic physics
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       // Only trigger burst on non-clickable areas (not buttons, links, inputs, etc.)
@@ -117,29 +117,46 @@ export function ParticleBackground() {
       if (!isClickable && target !== canvas) {
         const clickX = e.clientX;
         const clickY = e.clientY;
-        const burstRadius = 150;
+        const burstRadius = 280; // Larger burst radius for dramatic effect
+        const peakForce = 1.8; // Much stronger force
 
         burstRef.current.x = clickX;
         burstRef.current.y = clickY;
         burstRef.current.active = true;
 
-        // Apply burst force to nearby stars
+        // Apply realistic burst physics to nearby stars
         starsRef.current.forEach((star) => {
           const dx = star.x - clickX;
           const dy = star.y - clickY;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < burstRadius && distance > 1) {
+          if (distance < burstRadius && distance > 2) {
+            // Inverse square law physics - closer stars get more force
             const influence = Math.max(0, 1 - distance / burstRadius);
-            star.burstForce = influence * 0.8; // Peak burst intensity
-            star.burstDecay = 0;
+            const easeInfluence = influence * influence; // Quadratic easing
+
+            // Calculate burst direction (radially outward from click)
+            const angle = Math.atan2(dy, dx);
+            const burstSpeed = easeInfluence * peakForce;
+
+            // Apply strong initial velocity
+            star.burstVx = Math.cos(angle) * burstSpeed * 4.5;
+            star.burstVy = Math.sin(angle) * burstSpeed * 4.5;
+
+            // Set burst immunity duration (frames immune to attraction)
+            star.burstImmunity = 60; // 1 second at 60fps before re-attraction
+            star.burstIntensity = easeInfluence;
+
+            // Reset target velocity to prevent interference
+            star.targetVx = 0;
+            star.targetVy = 0;
           }
         });
 
         // Reset burst state after animation completes
         setTimeout(() => {
           burstRef.current.active = false;
-        }, 500);
+        }, 1000);
       }
     };
 
