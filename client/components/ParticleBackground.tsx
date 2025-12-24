@@ -178,6 +178,7 @@ export function ParticleBackground() {
           star.baseOpacity = Math.random() * 0.6 + 0.2;
           star.baseSize = Math.random() * 0.8 + 0.4;
           star.pulsePhase = Math.random() * Math.PI * 2;
+          star.driftPhase = Math.random() * Math.PI * 2;
         }
 
         // Wrap around edges
