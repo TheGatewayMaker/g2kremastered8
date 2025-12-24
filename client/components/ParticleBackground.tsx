@@ -15,6 +15,8 @@ interface Star {
   baseSize: number;
   pulsePhase: number;
   driftPhase: number;
+  burstForce: number;
+  burstDecay: number;
 }
 
 export function ParticleBackground() {
