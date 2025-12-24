@@ -313,6 +313,7 @@ export function ParticleBackground() {
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("click", handleClick);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
