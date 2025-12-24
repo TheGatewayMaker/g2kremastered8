@@ -214,8 +214,10 @@ export function ParticleBackground() {
         let burstVx = 0;
         let burstVy = 0;
         if (star.burstForce > 0 && star.burstDecay < 20) {
-          // Calculate burst direction (away from click point - will be set dynamically)
-          const angle = Math.atan2(star.y - mouseY, star.x - mouseX);
+          // Calculate burst direction (away from click point)
+          const clickX = burstRef.current.x;
+          const clickY = burstRef.current.y;
+          const angle = Math.atan2(star.y - clickY, star.x - clickX);
           burstVx = Math.cos(angle) * star.burstForce * 0.4;
           burstVy = Math.sin(angle) * star.burstForce * 0.4;
         }
