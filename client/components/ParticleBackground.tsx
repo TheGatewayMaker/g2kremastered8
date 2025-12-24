@@ -61,7 +61,9 @@ export function ParticleBackground() {
         Math.floor((window.innerWidth * window.innerHeight) / 5000),
       ),
     );
-    starsRef.current = Array.from({ length: starCount }, () => ({
+    const maxStarCount = starCount * 1.5; // Allow up to 50% more stars for respawning
+
+    const createStar = (): Star => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       z: Math.random() * 0.5 + 0.3,
@@ -76,7 +78,17 @@ export function ParticleBackground() {
       baseSize: Math.random() * 0.8 + 0.4,
       pulsePhase: Math.random() * Math.PI * 2,
       driftPhase: Math.random() * Math.PI * 2,
-    }));
+      burstForce: 0,
+      burstDecay: 0,
+    });
+
+    starsRef.current = Array.from({ length: starCount }, createStar);
+
+    const refs = {
+      maxStarCount,
+      createStar,
+      lastDensityCheck: 0,
+    };
 
     // Smooth mouse tracking
     const handleMouseMove = (e: MouseEvent) => {
