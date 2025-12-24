@@ -225,22 +225,26 @@ export function ParticleBackground() {
         const distanceSq = dx * dx + dy * dy;
         const distance = Math.sqrt(distanceSq);
 
-        // Handle burst immunity and decay
+        // Handle burst physics - stars coast naturally like in space
         if (star.burstImmunity > 0) {
           star.burstImmunity--;
-          // Apply burst velocity with inertial decay (realistic physics)
+
+          // Apply burst velocity - stars maintain momentum
           star.vx = star.burstVx;
           star.vy = star.burstVy;
 
-          // Gradual velocity decay (friction/air resistance)
-          star.burstVx *= 0.98;
-          star.burstVy *= 0.98;
+          // Extremely slow velocity decay (like space with no friction)
+          // 0.9985 means stars travel for 4-5 seconds before nearly stopping
+          star.burstVx *= 0.9985;
+          star.burstVy *= 0.9985;
 
-          // Enhanced brightness during burst
+          // Subtle brightness boost only at burst start
+          const burstProgress = 1 - star.burstImmunity / 300;
+          const brightnessFade = Math.max(0, 1 - burstProgress * burstProgress);
           star.currentOpacity =
-            star.baseOpacity + star.burstIntensity * 0.8 * twinkle;
+            star.baseOpacity + star.burstIntensity * 0.3 * brightnessFade;
         } else {
-          // Only allow cursor interaction when not in burst
+          // Only allow cursor interaction when burst has completely ended
           if (distance < attractRadius && distance > 1) {
             const influence = Math.max(0, 1 - distance / attractRadius);
             const easeInfluence = influence * influence * influence; // Cubic easing for smoother acceleration
