@@ -311,57 +311,33 @@ export function ParticleBackground() {
         if (star.y < -50) star.y = canvas.height + 50;
         if (star.y > canvas.height + 50) star.y = -50;
 
-        // Size based on depth with pulse effect for interactivity
+        // Size based on depth with pulse effect for interactivity (NO SIZE INCREASE)
         const baseSize = star.baseSize * (star.z * 0.6 + 0.4);
         const size = baseSize * pulse;
 
-        // Enhanced burst visualization
-        const burstGlowMultiplier = 1 + star.burstIntensity * 2;
-
-        // Draw outer glow (nebula effect) with enhanced visibility
-        ctx.fillStyle = `rgba(120, 170, 220, ${star.currentOpacity * 0.4 * burstGlowMultiplier})`;
+        // Draw outer glow (nebula effect) with standard visibility
+        ctx.fillStyle = `rgba(120, 170, 220, ${star.currentOpacity * 0.4})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, size * 2 * burstGlowMultiplier, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 2, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw middle glow - more prominent
-        ctx.fillStyle = `rgba(150, 200, 255, ${star.currentOpacity * 0.6 * burstGlowMultiplier})`;
+        ctx.fillStyle = `rgba(150, 200, 255, ${star.currentOpacity * 0.6})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, size * 1.4 * burstGlowMultiplier, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 1.4, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw core with bright color
-        ctx.fillStyle = `rgba(220, 240, 255, ${star.currentOpacity * burstGlowMultiplier})`;
+        ctx.fillStyle = `rgba(220, 240, 255, ${star.currentOpacity})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw bright center - enhanced glow
-        const centerBrightness = Math.max(
-          0,
-          star.currentOpacity * 0.95 * burstGlowMultiplier,
-        );
-        ctx.fillStyle = `rgba(255, 255, 255, ${centerBrightness})`;
+        // Draw bright center
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, star.currentOpacity * 0.95)})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, size * 0.6, 0, Math.PI * 2);
         ctx.fill();
-
-        // Draw burst explosion ring (visible only during burst)
-        if (star.burstIntensity > 0 && star.burstImmunity > 0) {
-          const ringAlpha =
-            (star.burstIntensity * star.burstImmunity) / 60 * 0.4;
-          ctx.strokeStyle = `rgba(255, 200, 100, ${ringAlpha})`;
-          ctx.lineWidth = 1.5 * burstGlowMultiplier;
-          ctx.beginPath();
-          ctx.arc(
-            star.x,
-            star.y,
-            size * 3 * burstGlowMultiplier,
-            0,
-            Math.PI * 2,
-          );
-          ctx.stroke();
-        }
       });
 
       animationRef.current = requestAnimationFrame(animate);
