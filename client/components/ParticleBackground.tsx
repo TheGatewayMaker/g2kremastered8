@@ -115,6 +115,10 @@ export function ParticleBackground() {
         const clickY = e.clientY;
         const burstRadius = 150;
 
+        burstRef.current.x = clickX;
+        burstRef.current.y = clickY;
+        burstRef.current.active = true;
+
         // Apply burst force to nearby stars
         starsRef.current.forEach((star) => {
           const dx = star.x - clickX;
@@ -127,6 +131,11 @@ export function ParticleBackground() {
             star.burstDecay = 0;
           }
         });
+
+        // Reset burst state after animation completes
+        setTimeout(() => {
+          burstRef.current.active = false;
+        }, 500);
       }
     };
 
