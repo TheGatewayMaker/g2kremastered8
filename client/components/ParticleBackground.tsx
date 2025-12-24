@@ -97,8 +97,8 @@ export function ParticleBackground() {
       const stars = starsRef.current;
       const mouseX = mouseRef.current.x;
       const mouseY = mouseRef.current.y;
-      const attractRadius = 350;
-      const repelRadius = 40;
+      const attractRadius = 300;
+      const repelRadius = 35;
       const mouseVelocity = Math.sqrt(
         mouseRef.current.vx ** 2 + mouseRef.current.vy ** 2,
       );
@@ -114,6 +114,11 @@ export function ParticleBackground() {
         star.pulsePhase += 0.03;
         const pulse = Math.sin(star.pulsePhase) * 0.15 + 1;
 
+        // Subtle drift animation for idle stars
+        star.driftPhase += 0.01;
+        const driftX = Math.sin(star.driftPhase) * 0.02;
+        const driftY = Math.cos(star.driftPhase * 0.7) * 0.02;
+
         // Distance to mouse
         const dx = mouseX - star.x;
         const dy = mouseY - star.y;
@@ -126,37 +131,37 @@ export function ParticleBackground() {
           const easeInfluence = influence * influence * influence; // Cubic easing for smoother acceleration
 
           if (distance > repelRadius) {
-            // Attraction with velocity-aware force
-            const baseForce = easeInfluence * 0.12;
-            const velocityBoost = mouseVelocity * 0.05;
+            // Attraction with faster response and velocity-aware force
+            const baseForce = easeInfluence * 0.22;
+            const velocityBoost = mouseVelocity * 0.08;
             const totalForce = baseForce + velocityBoost;
 
-            star.targetVx = (dx / distance) * totalForce * 2.5;
-            star.targetVy = (dy / distance) * totalForce * 2.5;
+            star.targetVx = (dx / distance) * totalForce * 2.8;
+            star.targetVy = (dy / distance) * totalForce * 2.8;
             star.currentOpacity =
               star.baseOpacity + easeInfluence * 0.5 * twinkle;
           } else {
             // Repulsion when too close - stronger and more dynamic
             const repelForce =
-              (1 - distance / repelRadius) * (0.2 + mouseVelocity * 0.1);
+              (1 - distance / repelRadius) * (0.25 + mouseVelocity * 0.15);
             star.targetVx = -(dx / distance) * repelForce;
             star.targetVy = -(dy / distance) * repelForce;
             star.currentOpacity = star.baseOpacity + 0.6;
           }
         } else {
           // Gradual return to idle state with subtle drift
-          star.targetVx *= 0.92;
-          star.targetVy *= 0.92;
+          star.targetVx = driftX;
+          star.targetVy = driftY;
           star.currentOpacity = star.baseOpacity * twinkle;
         }
 
-        // Smooth velocity interpolation with improved responsiveness
-        star.vx += (star.targetVx - star.vx) * 0.12;
-        star.vy += (star.targetVy - star.vy) * 0.12;
+        // Smooth velocity interpolation with improved responsiveness for faster attraction
+        star.vx += (star.targetVx - star.vx) * 0.18;
+        star.vy += (star.targetVy - star.vy) * 0.18;
 
         // Apply smooth damping for fluid motion
-        star.vx *= 0.92;
-        star.vy *= 0.92;
+        star.vx *= 0.93;
+        star.vy *= 0.93;
 
         // Update position
         star.x += star.vx;
