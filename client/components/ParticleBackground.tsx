@@ -23,6 +23,7 @@ export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const mouseRef = useRef({ x: 0, y: 0, vx: 0, vy: 0 });
+  const burstRef = useRef({ x: 0, y: 0, active: false });
   const animationRef = useRef<number>();
   const [isDesktop, setIsDesktop] = useState(true);
 
