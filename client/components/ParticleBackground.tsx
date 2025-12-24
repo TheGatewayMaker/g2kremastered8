@@ -225,63 +225,59 @@ export function ParticleBackground() {
         const distanceSq = dx * dx + dy * dy;
         const distance = Math.sqrt(distanceSq);
 
-        // Handle burst decay
-        if (star.burstForce > 0) {
-          star.burstDecay += 1;
-          star.burstForce = Math.max(0, star.burstForce - 0.04);
-        }
+        // Handle burst immunity and decay
+        if (star.burstImmunity > 0) {
+          star.burstImmunity--;
+          // Apply burst velocity with inertial decay (realistic physics)
+          star.vx = star.burstVx;
+          star.vy = star.burstVy;
 
-        // Apply burst effect
-        let burstVx = 0;
-        let burstVy = 0;
-        if (star.burstForce > 0 && star.burstDecay < 20) {
-          // Calculate burst direction (away from click point)
-          const clickX = burstRef.current.x;
-          const clickY = burstRef.current.y;
-          const angle = Math.atan2(star.y - clickY, star.x - clickX);
-          burstVx = Math.cos(angle) * star.burstForce * 0.4;
-          burstVy = Math.sin(angle) * star.burstForce * 0.4;
-        }
+          // Gradual velocity decay (friction/air resistance)
+          star.burstVx *= 0.98;
+          star.burstVy *= 0.98;
 
-        // Enhanced, physics-based cursor interaction with velocity awareness
-        if (distance < attractRadius && distance > 1 && star.burstForce === 0) {
-          const influence = Math.max(0, 1 - distance / attractRadius);
-          const easeInfluence = influence * influence * influence; // Cubic easing for smoother acceleration
+          // Enhanced brightness during burst
+          star.currentOpacity =
+            star.baseOpacity + star.burstIntensity * 0.8 * twinkle;
+        } else {
+          // Only allow cursor interaction when not in burst
+          if (distance < attractRadius && distance > 1) {
+            const influence = Math.max(0, 1 - distance / attractRadius);
+            const easeInfluence = influence * influence * influence; // Cubic easing for smoother acceleration
 
-          if (distance > repelRadius) {
-            // Attraction with faster response and velocity-aware force
-            const baseForce = easeInfluence * 0.22;
-            const velocityBoost = mouseVelocity * 0.08;
-            const totalForce = baseForce + velocityBoost;
+            if (distance > repelRadius) {
+              // Attraction with faster response and velocity-aware force
+              const baseForce = easeInfluence * 0.22;
+              const velocityBoost = mouseVelocity * 0.08;
+              const totalForce = baseForce + velocityBoost;
 
-            star.targetVx = (dx / distance) * totalForce * 2.8;
-            star.targetVy = (dy / distance) * totalForce * 2.8;
-            star.currentOpacity =
-              star.baseOpacity + easeInfluence * 0.5 * twinkle;
+              star.targetVx = (dx / distance) * totalForce * 2.8;
+              star.targetVy = (dy / distance) * totalForce * 2.8;
+              star.currentOpacity =
+                star.baseOpacity + easeInfluence * 0.5 * twinkle;
+            } else {
+              // Repulsion when too close - stronger and more dynamic
+              const repelForce =
+                (1 - distance / repelRadius) * (0.25 + mouseVelocity * 0.15);
+              star.targetVx = -(dx / distance) * repelForce;
+              star.targetVy = -(dy / distance) * repelForce;
+              star.currentOpacity = star.baseOpacity + 0.6;
+            }
           } else {
-            // Repulsion when too close - stronger and more dynamic
-            const repelForce =
-              (1 - distance / repelRadius) * (0.25 + mouseVelocity * 0.15);
-            star.targetVx = -(dx / distance) * repelForce;
-            star.targetVy = -(dy / distance) * repelForce;
-            star.currentOpacity = star.baseOpacity + 0.6;
+            // Gradual return to idle state with subtle drift
+            star.targetVx = driftX;
+            star.targetVy = driftY;
+            star.currentOpacity = star.baseOpacity * twinkle;
           }
-        } else if (star.burstForce === 0) {
-          // Gradual return to idle state with subtle drift
-          star.targetVx = driftX;
-          star.targetVy = driftY;
-          star.currentOpacity = star.baseOpacity * twinkle;
+
+          // Smooth velocity interpolation with improved responsiveness
+          star.vx += (star.targetVx - star.vx) * 0.18;
+          star.vy += (star.targetVy - star.vy) * 0.18;
+
+          // Apply smooth damping for fluid motion
+          star.vx *= 0.93;
+          star.vy *= 0.93;
         }
-
-        // Smooth velocity interpolation with improved responsiveness for faster attraction
-        const interpolationSpeed = star.burstForce > 0 ? 0.25 : 0.18;
-        star.vx += (star.targetVx - star.vx) * interpolationSpeed + burstVx;
-        star.vy += (star.targetVy - star.vy) * interpolationSpeed + burstVy;
-
-        // Apply smooth damping for fluid motion
-        const dampingFactor = star.burstForce > 0 ? 0.88 : 0.93;
-        star.vx *= dampingFactor;
-        star.vy *= dampingFactor;
 
         // Update position
         star.x += star.vx;
