@@ -95,8 +95,11 @@ export function ParticleBackground() {
       const stars = starsRef.current;
       const mouseX = mouseRef.current.x;
       const mouseY = mouseRef.current.y;
-      const attractRadius = 250;
-      const repelRadius = 50;
+      const attractRadius = 350;
+      const repelRadius = 40;
+      const mouseVelocity = Math.sqrt(
+        mouseRef.current.vx ** 2 + mouseRef.current.vy ** 2,
+      );
 
       frameCount++;
 
@@ -105,45 +108,53 @@ export function ParticleBackground() {
         star.twinkleCycle += 0.02;
         const twinkle = Math.sin(star.twinkleCycle) * 0.3 + 0.7;
 
+        // Pulse animation for interactive effect
+        star.pulsePhase += 0.03;
+        const pulse = Math.sin(star.pulsePhase) * 0.15 + 1;
+
         // Distance to mouse
         const dx = mouseX - star.x;
         const dy = mouseY - star.y;
         const distanceSq = dx * dx + dy * dy;
         const distance = Math.sqrt(distanceSq);
 
-        // Smooth, physics-based cursor interaction
+        // Enhanced, physics-based cursor interaction with velocity awareness
         if (distance < attractRadius && distance > 1) {
           const influence = Math.max(0, 1 - distance / attractRadius);
-          const easeInfluence = influence * influence; // Smooth easing
+          const easeInfluence = influence * influence * influence; // Cubic easing for smoother acceleration
 
           if (distance > repelRadius) {
-            // Attraction with smooth acceleration
-            const force = easeInfluence * 0.08;
-            star.targetVx = (dx / distance) * force * 2;
-            star.targetVy = (dy / distance) * force * 2;
+            // Attraction with velocity-aware force
+            const baseForce = easeInfluence * 0.12;
+            const velocityBoost = mouseVelocity * 0.05;
+            const totalForce = baseForce + velocityBoost;
+
+            star.targetVx = (dx / distance) * totalForce * 2.5;
+            star.targetVy = (dy / distance) * totalForce * 2.5;
             star.currentOpacity =
-              star.baseOpacity + easeInfluence * 0.4 * twinkle;
+              star.baseOpacity + easeInfluence * 0.5 * twinkle;
           } else {
-            // Repulsion when too close
-            const repelForce = (1 - distance / repelRadius) * 0.15;
+            // Repulsion when too close - stronger and more dynamic
+            const repelForce =
+              (1 - distance / repelRadius) * (0.2 + mouseVelocity * 0.1);
             star.targetVx = -(dx / distance) * repelForce;
             star.targetVy = -(dy / distance) * repelForce;
-            star.currentOpacity = star.baseOpacity + 0.5;
+            star.currentOpacity = star.baseOpacity + 0.6;
           }
         } else {
-          // Gradual return to idle state
-          star.targetVx *= 0.95;
-          star.targetVy *= 0.95;
+          // Gradual return to idle state with subtle drift
+          star.targetVx *= 0.92;
+          star.targetVy *= 0.92;
           star.currentOpacity = star.baseOpacity * twinkle;
         }
 
-        // Smooth velocity interpolation
-        star.vx += (star.targetVx - star.vx) * 0.08;
-        star.vy += (star.targetVy - star.vy) * 0.08;
+        // Smooth velocity interpolation with improved responsiveness
+        star.vx += (star.targetVx - star.vx) * 0.12;
+        star.vy += (star.targetVy - star.vy) * 0.12;
 
-        // Apply strong damping for smooth motion
-        star.vx *= 0.94;
-        star.vy *= 0.94;
+        // Apply smooth damping for fluid motion
+        star.vx *= 0.92;
+        star.vy *= 0.92;
 
         // Update position
         star.x += star.vx;
@@ -159,6 +170,7 @@ export function ParticleBackground() {
           star.vy = 0;
           star.baseOpacity = Math.random() * 0.6 + 0.2;
           star.baseSize = Math.random() * 0.8 + 0.4;
+          star.pulsePhase = Math.random() * Math.PI * 2;
         }
 
         // Wrap around edges
@@ -167,31 +179,32 @@ export function ParticleBackground() {
         if (star.y < -50) star.y = canvas.height + 50;
         if (star.y > canvas.height + 50) star.y = -50;
 
-        // Size based on depth with better scaling
-        const size = star.baseSize * (star.z * 0.6 + 0.4);
+        // Size based on depth with pulse effect for interactivity
+        const baseSize = star.baseSize * (star.z * 0.6 + 0.4);
+        const size = baseSize * pulse;
 
-        // Draw outer glow (nebula effect) - reduced radius, increased brightness
-        ctx.fillStyle = `rgba(120, 170, 220, ${star.currentOpacity * 0.35})`;
+        // Draw outer glow (nebula effect) with enhanced visibility
+        ctx.fillStyle = `rgba(120, 170, 220, ${star.currentOpacity * 0.4})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, size * 1.8, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 2, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw middle glow - increased brightness
-        ctx.fillStyle = `rgba(150, 200, 255, ${star.currentOpacity * 0.5})`;
+        // Draw middle glow - more prominent
+        ctx.fillStyle = `rgba(150, 200, 255, ${star.currentOpacity * 0.6})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, size * 1.2, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 1.4, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw core with bright color
-        ctx.fillStyle = `rgba(220, 240, 255, ${star.currentOpacity * 1.1})`;
+        ctx.fillStyle = `rgba(220, 240, 255, ${star.currentOpacity})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw bright center - increased brightness
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, star.currentOpacity * 0.85)})`;
+        // Draw bright center - enhanced glow
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, star.currentOpacity * 0.95)})`;
         ctx.beginPath();
-        ctx.arc(star.x, star.y, size * 0.5, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, size * 0.6, 0, Math.PI * 2);
         ctx.fill();
       });
 
