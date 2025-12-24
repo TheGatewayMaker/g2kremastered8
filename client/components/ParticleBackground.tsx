@@ -14,6 +14,7 @@ interface Star {
   twinkleCycle: number;
   baseSize: number;
   pulsePhase: number;
+  driftPhase: number;
 }
 
 export function ParticleBackground() {
