@@ -148,6 +148,32 @@ export function ParticleBackground() {
 
       frameCount++;
 
+      // Density-based respawning (every 30 frames for performance)
+      if (frameCount % 30 === 0 && stars.length < refs.maxStarCount) {
+        // Sample 5 random regions to check density
+        for (let i = 0; i < 5; i++) {
+          const sampleX = Math.random() * canvas.width;
+          const sampleY = Math.random() * canvas.height;
+          const regionRadius = 120;
+
+          // Count stars in this region
+          let starCount = 0;
+          for (let j = 0; j < stars.length; j++) {
+            const dx = stars[j].x - sampleX;
+            const dy = stars[j].y - sampleY;
+            if (dx * dx + dy * dy < regionRadius * regionRadius) {
+              starCount++;
+              if (starCount > 2) break; // Early exit for efficiency
+            }
+          }
+
+          // Spawn new star if region is empty enough
+          if (starCount <= 2 && Math.random() < 0.6) {
+            stars.push(refs.createStar());
+          }
+        }
+      }
+
       stars.forEach((star) => {
         // Smooth twinkling animation
         star.twinkleCycle += 0.02;
@@ -168,8 +194,24 @@ export function ParticleBackground() {
         const distanceSq = dx * dx + dy * dy;
         const distance = Math.sqrt(distanceSq);
 
+        // Handle burst decay
+        if (star.burstForce > 0) {
+          star.burstDecay += 1;
+          star.burstForce = Math.max(0, star.burstForce - 0.04);
+        }
+
+        // Apply burst effect
+        let burstVx = 0;
+        let burstVy = 0;
+        if (star.burstForce > 0 && star.burstDecay < 20) {
+          // Calculate burst direction (away from click point - will be set dynamically)
+          const angle = Math.atan2(star.y - mouseY, star.x - mouseX);
+          burstVx = Math.cos(angle) * star.burstForce * 0.4;
+          burstVy = Math.sin(angle) * star.burstForce * 0.4;
+        }
+
         // Enhanced, physics-based cursor interaction with velocity awareness
-        if (distance < attractRadius && distance > 1) {
+        if (distance < attractRadius && distance > 1 && star.burstForce === 0) {
           const influence = Math.max(0, 1 - distance / attractRadius);
           const easeInfluence = influence * influence * influence; // Cubic easing for smoother acceleration
 
@@ -191,7 +233,7 @@ export function ParticleBackground() {
             star.targetVy = -(dy / distance) * repelForce;
             star.currentOpacity = star.baseOpacity + 0.6;
           }
-        } else {
+        } else if (star.burstForce === 0) {
           // Gradual return to idle state with subtle drift
           star.targetVx = driftX;
           star.targetVy = driftY;
@@ -199,12 +241,14 @@ export function ParticleBackground() {
         }
 
         // Smooth velocity interpolation with improved responsiveness for faster attraction
-        star.vx += (star.targetVx - star.vx) * 0.18;
-        star.vy += (star.targetVy - star.vy) * 0.18;
+        const interpolationSpeed = star.burstForce > 0 ? 0.25 : 0.18;
+        star.vx += (star.targetVx - star.vx) * interpolationSpeed + burstVx;
+        star.vy += (star.targetVy - star.vy) * interpolationSpeed + burstVy;
 
         // Apply smooth damping for fluid motion
-        star.vx *= 0.93;
-        star.vy *= 0.93;
+        const dampingFactor = star.burstForce > 0 ? 0.88 : 0.93;
+        star.vx *= dampingFactor;
+        star.vy *= dampingFactor;
 
         // Update position
         star.x += star.vx;
@@ -222,6 +266,8 @@ export function ParticleBackground() {
           star.baseSize = Math.random() * 0.8 + 0.4;
           star.pulsePhase = Math.random() * Math.PI * 2;
           star.driftPhase = Math.random() * Math.PI * 2;
+          star.burstForce = 0;
+          star.burstDecay = 0;
         }
 
         // Wrap around edges
