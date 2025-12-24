@@ -128,10 +128,10 @@ export default function Apps() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-[hsl(var(--text-secondary))] transition-all duration-300 hover:text-[hsl(var(--text-primary))] hover:bg-[hsl(var(--bg-secondary))]"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-300"
                     >
-                      <span className="text-lg leading-none">•</span>
-                      <span>{link.name}</span>
+                      <span className="text-lg leading-none text-[hsl(var(--text-secondary))]">•</span>
+                      <span className="text-[hsl(var(--text-secondary))] transition-colors duration-300 hover:text-[hsl(var(--text-primary))]">{link.name}</span>
                     </a>
                   ))}
                 </div>
