@@ -101,7 +101,36 @@ export function ParticleBackground() {
       mouseRef.current.y = newY;
     };
 
+    // Handle click burst effect
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // Only trigger burst on non-clickable areas (not buttons, links, inputs, etc.)
+      const isClickable = target.closest(
+        "button, a, input, textarea, [role='button'], [onclick]"
+      );
+
+      if (!isClickable && target !== canvas) {
+        const clickX = e.clientX;
+        const clickY = e.clientY;
+        const burstRadius = 150;
+
+        // Apply burst force to nearby stars
+        starsRef.current.forEach((star) => {
+          const dx = star.x - clickX;
+          const dy = star.y - clickY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < burstRadius && distance > 1) {
+            const influence = Math.max(0, 1 - distance / burstRadius);
+            star.burstForce = influence * 0.8; // Peak burst intensity
+            star.burstDecay = 0;
+          }
+        });
+      }
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("click", handleClick);
 
     let frameCount = 0;
 
