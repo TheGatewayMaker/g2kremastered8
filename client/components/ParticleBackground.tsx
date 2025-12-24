@@ -295,8 +295,10 @@ export function ParticleBackground() {
           star.baseSize = Math.random() * 0.8 + 0.4;
           star.pulsePhase = Math.random() * Math.PI * 2;
           star.driftPhase = Math.random() * Math.PI * 2;
-          star.burstForce = 0;
-          star.burstDecay = 0;
+          star.burstVx = 0;
+          star.burstVy = 0;
+          star.burstImmunity = 0;
+          star.burstIntensity = 0;
         }
 
         // Wrap around edges
