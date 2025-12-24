@@ -71,6 +71,7 @@ export function ParticleBackground() {
       targetVy: 0,
       twinkleCycle: Math.random() * Math.PI * 2,
       baseSize: Math.random() * 0.8 + 0.4,
+      pulsePhase: Math.random() * Math.PI * 2,
     }));
 
     // Smooth mouse tracking
