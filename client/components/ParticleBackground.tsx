@@ -13,6 +13,7 @@ interface Star {
   targetVy: number;
   twinkleCycle: number;
   baseSize: number;
+  pulsePhase: number;
 }
 
 export function ParticleBackground() {
