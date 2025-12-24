@@ -111,7 +111,7 @@ export function ParticleBackground() {
       const target = e.target as HTMLElement;
       // Only trigger burst on non-clickable areas (not buttons, links, inputs, etc.)
       const isClickable = target.closest(
-        "button, a, input, textarea, [role='button'], [onclick]"
+        "button, a, input, textarea, [role='button'], [onclick]",
       );
 
       if (!isClickable && target !== canvas) {

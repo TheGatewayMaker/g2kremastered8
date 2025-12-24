@@ -130,8 +130,12 @@ export default function Apps() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-300"
                     >
-                      <span className="text-lg leading-none text-[hsl(var(--text-secondary))]">•</span>
-                      <span className="text-[hsl(var(--text-secondary))] transition-colors duration-300 hover:text-[hsl(var(--text-primary))]">{link.name}</span>
+                      <span className="text-lg leading-none text-[hsl(var(--text-secondary))]">
+                        •
+                      </span>
+                      <span className="text-[hsl(var(--text-secondary))] transition-colors duration-300 hover:text-[hsl(var(--text-primary))]">
+                        {link.name}
+                      </span>
                     </a>
                   ))}
                 </div>
