@@ -81,8 +81,10 @@ export function ParticleBackground() {
       baseSize: Math.random() * 0.8 + 0.4,
       pulsePhase: Math.random() * Math.PI * 2,
       driftPhase: Math.random() * Math.PI * 2,
-      burstForce: 0,
-      burstDecay: 0,
+      burstVx: 0,
+      burstVy: 0,
+      burstImmunity: 0,
+      burstIntensity: 0,
     });
 
     starsRef.current = Array.from({ length: starCount }, createStar);
